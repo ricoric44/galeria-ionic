@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-title>Zona Segura: Panel de Control</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="handleLogout()">Cerrar Sesión</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card color="light">
+    <ion-card-header>
+      <ion-card-title>Bienvenido, {{ currentSession()?.username }}</ion-card-title>
+      <ion-card-subtitle>Rol: {{ currentSession()?.role }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Has superado la validación del enrutador (<code>authGuard</code>) y de <code>roleGuard('admin')</code>.</p>
+      <p>La sesión está almacenada activamente en <code>sessionStorage</code>.</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

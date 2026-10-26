@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Panel de usuario</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="handleLogout()">Cerrar Sesión</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Hola, {{ currentSession()?.username }}</ion-card-title>
+      <ion-card-subtitle>Rol: {{ currentSession()?.role }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Esta es tu página. No tienes acceso a <code>/admin</code>: el <code>roleGuard</code> te redirige aquí.</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
