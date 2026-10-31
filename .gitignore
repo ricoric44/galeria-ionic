@@ -72,3 +72,5 @@ memoria/credenciales.local.json
 memoria/*.pdf
 memoria/memoria.html
 informes-calidad/*.report.json
+.vercel
+memoria/.perfil-edge/

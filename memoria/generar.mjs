@@ -31,7 +31,7 @@ const navegadores = [
 const exe = navegadores.find(existsSync);
 if (!exe) throw new Error('No se encontro Edge ni Chrome');
 execFileSync(exe, [
-  '--headless=new', '--disable-gpu', '--no-pdf-header-footer',
+  '--headless=new', '--disable-gpu', '--user-data-dir=' + resolve('memoria/.perfil-edge'), '--no-pdf-header-footer',
   `--print-to-pdf=${resolve('memoria/memoria.pdf')}`, pathToFileURL(resolve('memoria/memoria.html')).href,
 ]);
 console.log('Generado memoria/memoria.pdf');
