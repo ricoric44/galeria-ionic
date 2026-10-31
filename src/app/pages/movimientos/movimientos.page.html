@@ -1,0 +1,23 @@
+<app-cabecera titulo="Movimientos" />
+<ion-content>
+  <main id="contenido-principal" tabindex="-1" class="caja ancha">
+    <h1>Movimientos en tiempo real</h1>
+    <p>Colección NoSQL tipo Firestore: la lista se actualiza sola cuando llegan documentos nuevos.</p>
+
+    <div class="acciones">
+      <button type="button" class="primario" (click)="registrar('entrada')">Registrar entrada de 1 unidad</button>
+      <button type="button" class="secundario" (click)="registrar('salida')">Registrar salida de 1 unidad</button>
+    </div>
+    <p class="ok" role="status" aria-live="polite">{{ aviso() }}</p>
+
+    <ul class="feed" aria-label="Últimos movimientos">
+      @for (m of movimientos().slice(0, 12); track m.id) {
+        <li>
+          <span class="tipo-mov" [class.salida]="m.tipo === 'salida'">{{ m.tipo === 'entrada' ? 'Entrada' : 'Salida' }}</span>
+          <strong>{{ m.cantidad }} × {{ m.producto }}</strong>
+          <span>{{ m.usuario }} · {{ m.fecha | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+        </li>
+      }
+    </ul>
+  </main>
+</ion-content>

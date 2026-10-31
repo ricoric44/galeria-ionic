@@ -1,20 +1,22 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { provideIonicAngular } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
-import { AppModule } from './app.module';
 
 describe('AppComponent', () => {
-
   beforeEach(async () => {
+    sessionStorage.clear();
     await TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [AppComponent],
+      providers: [provideRouter([]), provideIonicAngular()],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('se crea sin sesión y no muestra el menú', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    fixture.detectChanges();
+    expect(fixture.componentInstance).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('ion-menu')).toBeNull();
   });
-
 });
