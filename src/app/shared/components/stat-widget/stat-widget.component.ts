@@ -7,8 +7,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 @Component({
   selector: 'app-stat-widget',
   template: `
-    <button type="button" class="widget" [class.alerta]="alerta()" (click)="seleccionado.emit(etiqueta())"
-            [attr.aria-label]="etiqueta() + ': ' + valor() + (detalle() ? '. ' + detalle() : '')">
+    <button type="button" class="widget" [class.alerta]="alerta()" (click)="seleccionado.emit(etiqueta())">
       <span class="etiqueta">{{ etiqueta() }}</span>
       <span class="valor">{{ valor() }}</span>
       @if (detalle()) {

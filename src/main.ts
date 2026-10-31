@@ -1,4 +1,6 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { isDevMode } from '@angular/core';
+import { provideServiceWorker } from '@angular/service-worker';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { PreloadAllModules, RouteReuseStrategy, provideRouter, withPreloading } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
@@ -12,6 +14,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
+    provideServiceWorker('ngsw-worker.js', { enabled: !isDevMode(), registrationStrategy: 'registerWhenStable:30000' }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     // El orden define el pipeline: primero la autenticación, el servidor simulado el último.
     provideHttpClient(withInterceptors([authInterceptor, mockBackendInterceptor])),
