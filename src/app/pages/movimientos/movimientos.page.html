@@ -13,7 +13,7 @@
     <ul class="feed" aria-label="Últimos movimientos">
       @for (m of movimientos().slice(0, 12); track m.id) {
         <li>
-          <span class="etiqueta" [class.salida]="m.tipo === 'salida'">{{ m.tipo === 'entrada' ? 'Entrada' : 'Salida' }}</span>
+          <span class="tipo-mov" [class.salida]="m.tipo === 'salida'">{{ m.tipo === 'entrada' ? 'Entrada' : 'Salida' }}</span>
           <strong>{{ m.cantidad }} × {{ m.producto }}</strong>
           <span>{{ m.usuario }} · {{ m.fecha | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
         </li>

@@ -21,7 +21,7 @@
         (filaSeleccionada)="seleccionar($event)" />
 
       @if (seleccionado(); as s) {
-        <p class="detalle" role="status">Seleccionado: <strong>{{ s.nombre }}</strong> · {{ s.precio | currency: 'EUR' }} · {{ s.stock }} uds.</p>
+        <p class="seleccion" role="status">Seleccionado: <strong>{{ s.nombre }}</strong> · {{ s.precio | currency: 'EUR' }} · {{ s.stock }} uds.</p>
       }
 
       @if (puedeEditar) {
