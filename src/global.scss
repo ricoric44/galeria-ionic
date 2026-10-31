@@ -34,4 +34,65 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; (desactivado: la interfaz usa un tema claro con contraste verificado) */
+
+/* ---------- Estilos propios de la aplicación (mobile-first) ---------- */
+:root { --texto: #14233b; --borde: #5c6370; --acento: #1c4e80; }
+
+:focus-visible { outline: 3px solid #0b57d0; outline-offset: 2px; }
+
+.caja { max-width: 440px; margin: 0 auto; padding: 24px 16px 48px; color: var(--texto); }
+.caja.ancha { max-width: 1080px; }
+.caja.texto { max-width: 760px; line-height: 1.6; }
+.caja:focus { outline: none; }
+.caja h1 { font-size: 1.625rem; margin: 0 0 8px; }
+.caja h2 { font-size: 1.25rem; margin: 28px 0 8px; }
+
+.campo { display: grid; gap: 4px; margin-bottom: 12px; }
+.campo label { font-weight: 600; }
+.campo input, .campo select {
+  font: inherit; min-height: 44px; padding: 8px 12px; border: 1px solid var(--borde); border-radius: 8px;
+  background: #fff; color: var(--texto);
+}
+.campo input[aria-invalid='true'] { border: 2px solid #9b1c1c; }
+.ayuda { margin: 0; font-size: 0.875rem; color: #3f4a5a; }
+.error { margin: 0; min-height: 1.25rem; color: #9b1c1c; font-size: 0.9rem; }
+.info { color: #3f4a5a; }
+.ok { margin: 8px 0; min-height: 1.25rem; color: #1b5e20; font-weight: 600; }
+
+.primario, .secundario {
+  font: inherit; font-weight: 700; min-height: 44px; padding: 0 20px; border-radius: 8px; cursor: pointer;
+  border: 2px solid var(--acento);
+}
+.primario { background: var(--acento); color: #fff; }
+.secundario { background: #fff; color: var(--acento); }
+.primario:disabled { opacity: 0.6; cursor: wait; }
+.primario:hover:not(:disabled) { background: #123a63; }
+.secundario:hover { background: #e3ecf7; }
+.pie { margin-top: 20px; }
+.pie a, .caja a { color: #0b3a6b; text-decoration: underline; }
+
+.acciones { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
+.rejilla { display: grid; gap: 12px; grid-template-columns: 1fr; margin: 12px 0 20px; }
+.rejilla-form { display: grid; gap: 0 16px; grid-template-columns: 1fr; max-width: 560px; }
+.filtros { display: grid; gap: 0 16px; grid-template-columns: 1fr; max-width: 560px; }
+.cargando { display: flex; align-items: center; gap: 12px; }
+.seleccion { padding: 10px 14px; background: #eef2f8; border-radius: 8px; }
+
+.feed { list-style: none; margin: 16px 0; padding: 0; display: grid; gap: 8px; }
+.feed li { display: grid; gap: 2px; padding: 10px 14px; border: 1px solid #c3c8d0; border-radius: 10px; background: #fff; }
+.tipo-mov { justify-self: start; padding: 2px 10px; border-radius: 999px; background: #dcefe0; color: #14501a; font-size: 0.8125rem; font-weight: 700; }
+.tipo-mov.salida { background: #fde3dc; color: #7a1d0c; }
+
+@media (min-width: 600px) {
+  .rejilla { grid-template-columns: repeat(2, 1fr); }
+  .rejilla-form, .filtros { grid-template-columns: 1fr 1fr; }
+  .rejilla.dos { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 992px) {
+  .rejilla:not(.dos) { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

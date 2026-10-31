@@ -34,8 +34,19 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": []
+            "styles": [
+              "src/global.scss",
+              "src/theme/variables.scss"
+            ],
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "html2canvas",
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor",
+              "dompurify"
+            ]
           },
           "configurations": {
             "production": {
@@ -97,7 +108,9 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "buildTarget": "::development",
-            "setupFiles": ["src/test-setup.ts"]
+            "setupFiles": [
+              "src/test-setup.ts"
+            ]
           },
           "configurations": {
             "ci": {

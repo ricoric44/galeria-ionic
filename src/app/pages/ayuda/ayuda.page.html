@@ -1,0 +1,45 @@
+<app-cabecera titulo="Ayuda" />
+<ion-content>
+  <main id="contenido-principal" tabindex="-1" class="caja ancha texto">
+    <h1>Manual de usuario</h1>
+    <nav aria-label="Índice de la ayuda">
+      <ol>
+        <li><a href="#acceso">Acceso y roles</a></li>
+        <li><a href="#productos">Productos</a></li>
+        <li><a href="#movimientos">Movimientos en tiempo real</a></li>
+        <li><a href="#cuadro">Cuadro de mando e informes</a></li>
+        <li><a href="#accesibilidad">Accesibilidad y atajos de teclado</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="acceso">1. Acceso y roles</h2>
+    <p>Entra con tu correo y contraseña. Si no tienes cuenta, usa <em>Crear cuenta</em>: el sistema comprueba en directo
+      si el correo ya existe. Hay dos roles:</p>
+    <ul>
+      <li><strong>Administrador</strong>: ve todo, da de alta y elimina productos, gestiona usuarios y accede al cuadro de mando.</li>
+      <li><strong>Usuario estándar</strong>: consulta productos y movimientos. Si escribe la dirección de una sección de administrador, vuelve al inicio.</li>
+    </ul>
+    <p>La sesión caduca a los 5 minutos; se renueva sola mientras uses la aplicación.</p>
+
+    <h2 id="productos">2. Productos</h2>
+    <p>La tabla permite buscar (escribe en el cuadro), ordenar (pulsa en una cabecera) y paginar. El administrador dispone además
+      del botón <em>Eliminar</em> en cada fila y del formulario de alta bajo la tabla.</p>
+
+    <h2 id="movimientos">3. Movimientos en tiempo real</h2>
+    <p>Muestra entradas y salidas de stock. Cada pocos segundos llegan movimientos de otros puntos de venta y aparecen arriba
+      sin recargar. Con los botones puedes registrar un movimiento tuyo.</p>
+
+    <h2 id="cuadro">4. Cuadro de mando e informes (administrador)</h2>
+    <p>Reúne los indicadores y dos gráficos. Con los filtros de categoría y tipo de movimiento todo se recalcula al momento;
+      también puedes pulsar una barra del gráfico para filtrar por esa categoría. Para guardar los datos usa
+      <em>Descargar PDF</em> o <em>Descargar CSV</em>: se exporta la tabla de productos con el filtro aplicado.</p>
+
+    <h2 id="accesibilidad">5. Accesibilidad y atajos de teclado</h2>
+    <ul>
+      <li><kbd>Tab</kbd> y <kbd>Mayús</kbd>+<kbd>Tab</kbd> recorren los controles; el foco siempre es visible.</li>
+      <li>Al empezar a tabular aparece <em>Saltar al contenido principal</em>.</li>
+      <li><kbd>Intro</kbd> o <kbd>Espacio</kbd> activan botones; en las cabeceras de la tabla ordenan por esa columna.</li>
+      <li>La interfaz es compatible con lectores de pantalla y admite ampliar el texto del navegador hasta el 200 %.</li>
+    </ul>
+  </main>
+</ion-content>

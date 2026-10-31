@@ -1,0 +1,53 @@
+<app-cabecera titulo="Cuadro de mando" />
+<ion-content>
+  <main id="contenido-principal" tabindex="-1" class="caja ancha">
+    <h1>Cuadro de mando</h1>
+    <p>Datos consolidados de la API SQL y de la colección de movimientos en tiempo real.</p>
+
+    @if (cargando()) {
+      <p role="status" class="cargando"><ion-spinner name="crescent" aria-hidden="true"></ion-spinner> Consolidando datos de las dos fuentes…</p>
+    } @else if (error()) {
+      <p class="error" role="alert">{{ error() }} <button type="button" class="secundario" (click)="cargar()">Reintentar</button></p>
+    } @else {
+      <form class="filtros" aria-label="Filtros del cuadro de mando" (submit)="$event.preventDefault()">
+        <div class="campo">
+          <label for="f-cat">Categoría</label>
+          <select id="f-cat" [value]="categoria()" (change)="filtrarCategoria($any($event.target).value)">
+            @for (c of categorias(); track c) { <option [selected]="c === categoria()">{{ c }}</option> }
+          </select>
+        </div>
+        <div class="campo">
+          <label for="f-tipo">Tipo de movimiento</label>
+          <select id="f-tipo" [value]="tipo()" (change)="tipo.set($any($event.target).value)">
+            <option value="todos">Todos</option>
+            <option value="entrada">Entradas</option>
+            <option value="salida">Salidas</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="rejilla" role="group" aria-label="Indicadores">
+        <app-stat-widget etiqueta="Valor del inventario" [valor]="valorInventario() | currency: 'EUR' : 'symbol' : '1.0-0'" (seleccionado)="aviso.set('Valor calculado con precio × stock.')" />
+        <app-stat-widget etiqueta="Unidades en stock" [valor]="unidades() | number" />
+        <app-stat-widget etiqueta="Sin stock" [valor]="sinStock()" [alerta]="sinStock() > 0" />
+        <app-stat-widget etiqueta="Movimientos" [valor]="movimientosFiltrados().length" detalle="Se actualiza en tiempo real" />
+      </div>
+
+      <div class="rejilla dos">
+        <app-grafico tipo="bar" titulo="Unidades en stock por categoría"
+          [etiquetas]="stockPorCategoria().etiquetas" [valores]="stockPorCategoria().valores"
+          (segmentoPulsado)="elegirCategoriaDesdeGrafico($event)" />
+        <app-grafico tipo="doughnut" titulo="Movimientos por tipo"
+          [etiquetas]="movimientosPorTipo().etiquetas" [valores]="movimientosPorTipo().valores" />
+      </div>
+
+      <h2>Exportar informe</h2>
+      <p>Descarga la tabla de productos con el filtro de categoría aplicado.</p>
+      <div class="acciones">
+        <button type="button" class="primario" (click)="descargarPdf()">Descargar PDF</button>
+        <button type="button" class="secundario" (click)="descargarCsv()">Descargar CSV</button>
+      </div>
+      <p class="ok" role="status" aria-live="polite">{{ aviso() }}</p>
+    }
+  </main>
+</ion-content>

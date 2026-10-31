@@ -1,3 +1,32 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <a class="saltar" href="#contenido-principal" (click)="$event.preventDefault(); irAlContenido()">Saltar al contenido principal</a>
+  <ion-split-pane contentId="main" when="lg" [disabled]="!auth.currentUser()">
+    @if (auth.currentUser(); as sesion) {
+      <ion-menu contentId="main" type="overlay" aria-label="Menú principal">
+        <ion-header>
+          <ion-toolbar color="dark">
+            <ion-title>Gestión</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <p class="sesion">{{ sesion.nombre }}<br /><span>{{ sesion.role === 'admin' ? 'Administrador' : 'Usuario estándar' }}</span></p>
+          <nav aria-label="Secciones">
+            <ion-list lines="none">
+              <ion-menu-toggle [autoHide]="false">
+                <ion-item routerLink="/inicio" routerLinkActive="activo" button detail="false"><ion-label>Inicio</ion-label></ion-item>
+                <ion-item routerLink="/productos" routerLinkActive="activo" button detail="false"><ion-label>Productos (SQL)</ion-label></ion-item>
+                <ion-item routerLink="/movimientos" routerLinkActive="activo" button detail="false"><ion-label>Movimientos (tiempo real)</ion-label></ion-item>
+                <ion-item *hasRole="'admin'" routerLink="/dashboard" routerLinkActive="activo" button detail="false"><ion-label>Cuadro de mando</ion-label></ion-item>
+                <ion-item *hasRole="'admin'" routerLink="/usuarios" routerLinkActive="activo" button detail="false"><ion-label>Usuarios</ion-label></ion-item>
+                <ion-item routerLink="/ayuda" routerLinkActive="activo" button detail="false"><ion-label>Ayuda</ion-label></ion-item>
+                <ion-item routerLink="/galeria" routerLinkActive="activo" button detail="false"><ion-label>Galería</ion-label></ion-item>
+                <ion-item button detail="false" (click)="cerrarSesion()"><ion-label>Cerrar sesión</ion-label></ion-item>
+              </ion-menu-toggle>
+            </ion-list>
+          </nav>
+        </ion-content>
+      </ion-menu>
+    }
+    <ion-router-outlet id="main"></ion-router-outlet>
+  </ion-split-pane>
 </ion-app>
