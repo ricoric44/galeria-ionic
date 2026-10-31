@@ -16,8 +16,8 @@
                 <ion-item routerLink="/inicio" routerLinkActive="activo" button detail="false"><ion-label>Inicio</ion-label></ion-item>
                 <ion-item routerLink="/productos" routerLinkActive="activo" button detail="false"><ion-label>Productos (SQL)</ion-label></ion-item>
                 <ion-item routerLink="/movimientos" routerLinkActive="activo" button detail="false"><ion-label>Movimientos (tiempo real)</ion-label></ion-item>
-                <ion-item *hasRole="'admin'" routerLink="/dashboard" routerLinkActive="activo" button detail="false"><ion-label>Cuadro de mando</ion-label></ion-item>
-                <ion-item *hasRole="'admin'" routerLink="/usuarios" routerLinkActive="activo" button detail="false"><ion-label>Usuarios</ion-label></ion-item>
+                <ion-item *appHasRole="'admin'" routerLink="/dashboard" routerLinkActive="activo" button detail="false"><ion-label>Cuadro de mando</ion-label></ion-item>
+                <ion-item *appHasRole="'admin'" routerLink="/usuarios" routerLinkActive="activo" button detail="false"><ion-label>Usuarios</ion-label></ion-item>
                 <ion-item routerLink="/ayuda" routerLinkActive="activo" button detail="false"><ion-label>Ayuda</ion-label></ion-item>
                 <ion-item routerLink="/galeria" routerLinkActive="activo" button detail="false"><ion-label>Galería</ion-label></ion-item>
                 <ion-item button detail="false" (click)="cerrarSesion()"><ion-label>Cerrar sesión</ion-label></ion-item>

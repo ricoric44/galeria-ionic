@@ -1,5 +1,5 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IonContent, IonSpinner } from '@ionic/angular';
 import { forkJoin } from 'rxjs';
@@ -32,6 +32,7 @@ const COLUMNAS_PRODUCTOS: ColumnaInforme<Producto>[] = [
 export class DashboardPage {
   private productosApi = inject(ProductosService);
   private movimientosApi = inject(MovimientosService);
+  private destroyRef = inject(DestroyRef);
 
   protected productos = signal<Producto[]>([]);
   protected movimientos = signal<Movimiento[]>([]);
@@ -75,7 +76,7 @@ export class DashboardPage {
     this.error.set('');
     // Las dos fuentes se piden a la vez: el tiempo total es el de la más lenta, no la suma.
     forkJoin({ productos: this.productosApi.listar(), movimientos: this.movimientosApi.leerUnaVez() })
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ productos, movimientos }) => {
           this.productos.set(productos);
@@ -91,7 +92,7 @@ export class DashboardPage {
   private escucharTiempoReal(): void {
     if (this.escuchando) return;
     this.escuchando = true;
-    this.movimientosApi.escuchar().pipe(takeUntilDestroyed()).subscribe(docs => this.movimientos.set(docs));
+    this.movimientosApi.escuchar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(docs => this.movimientos.set(docs));
   }
 
   protected filtrarCategoria(c: string): void {
