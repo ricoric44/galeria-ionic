@@ -1,0 +1,56 @@
+<app-cabecera titulo="Productos" />
+<ion-content>
+  <main id="contenido-principal" tabindex="-1" class="caja ancha">
+    <h1>Productos</h1>
+    <p>Datos servidos por la API REST relacional (SQL simulada).</p>
+
+    <p class="ok" role="status">{{ aviso() }}</p>
+
+    @if (cargando()) {
+      <p role="status" class="cargando"><ion-spinner name="crescent" aria-hidden="true"></ion-spinner> Cargando productos…</p>
+    } @else if (error()) {
+      <p class="error" role="alert">{{ error() }} <button type="button" class="secundario" (click)="cargar()">Reintentar</button></p>
+    } @else {
+      <app-data-table
+        titulo="Productos"
+        [columnas]="columnas"
+        [filas]="filas()"
+        [tamanoPagina]="6"
+        [etiquetaAccion]="puedeEditar ? 'Eliminar' : null"
+        (accion)="eliminar($event)"
+        (filaSeleccionada)="seleccionar($event)" />
+
+      @if (seleccionado(); as s) {
+        <p class="detalle" role="status">Seleccionado: <strong>{{ s.nombre }}</strong> · {{ s.precio | currency: 'EUR' }} · {{ s.stock }} uds.</p>
+      }
+
+      @if (puedeEditar) {
+        <h2>Alta de producto</h2>
+        <form [formGroup]="form" (ngSubmit)="alta()" novalidate class="rejilla-form">
+          <div class="campo">
+            <label for="p-nombre">Nombre</label>
+            <input id="p-nombre" formControlName="nombre" [attr.aria-invalid]="form.controls.nombre.touched && form.controls.nombre.invalid" />
+          </div>
+          <div class="campo">
+            <label for="p-cat">Categoría</label>
+            <select id="p-cat" formControlName="categoria">
+              @for (c of ['Accesorios', 'Ordenadores', 'Pantallas', 'Periféricos']; track c) { <option>{{ c }}</option> }
+            </select>
+          </div>
+          <div class="campo">
+            <label for="p-precio">Precio (€)</label>
+            <input id="p-precio" type="number" step="0.01" formControlName="precio" [attr.aria-invalid]="form.controls.precio.touched && form.controls.precio.invalid" />
+          </div>
+          <div class="campo">
+            <label for="p-stock">Stock</label>
+            <input id="p-stock" type="number" formControlName="stock" [attr.aria-invalid]="form.controls.stock.touched && form.controls.stock.invalid" />
+          </div>
+          @if (form.touched && form.invalid) {
+            <p class="error" role="alert">Revisa los campos: nombre (3+ caracteres), precio mayor que 0 y stock no negativo.</p>
+          }
+          <button type="submit" class="primario">Añadir producto</button>
+        </form>
+      }
+    }
+  </main>
+</ion-content>

@@ -6,6 +6,7 @@ import { Claims, Rol, decodificar, haCaducado } from './token.util';
 
 export interface Sesion {
   username: string;
+  nombre: string;
   role: Rol;
   permisos: string[];
   exp: number;
@@ -23,14 +24,14 @@ export class AuthService {
   public currentUser = computed<Sesion | null>(() => {
     const claims: Claims | null = decodificar(this.accessToken_());
     if (!claims) return null;
-    return { username: claims.username, role: claims.roles[0], permisos: claims.permisos, exp: claims.exp };
+    return { username: claims.username, nombre: claims.nombre, role: claims.roles[0], permisos: claims.permisos, exp: claims.exp };
   });
 
   // Refresh en vuelo compartido (single-flight): varias peticiones con 401 esperan al mismo.
   private refrescoEnVuelo$: Observable<string> | null = null;
 
-  public login(username: string, password: string): boolean {
-    const respuesta = iniciarSesionServidor(username, password);
+  public async login(username: string, password: string): Promise<boolean> {
+    const respuesta = await iniciarSesionServidor(username, password);
     if (!respuesta) return false;
     this.guardar(respuesta.accessToken, respuesta.refreshToken);
     return true;
@@ -75,7 +76,7 @@ export class AuthService {
   public caducarAccessToken(): void {
     const user = this.currentUser();
     if (!user) return;
-    const caducado = emitirAcceso(user.username, user.role, -60);
+    const caducado = emitirAcceso({ id: 0, nombre: user.nombre, email: user.username, rol: user.role }, -60);
     sessionStorage.setItem(CLAVE_ACCESO, caducado);
     this.accessToken_.set(caducado);
   }

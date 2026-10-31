@@ -17,6 +17,6 @@ export const roleGuard = (...rolesPermitidos: Rol[]): CanMatchFn => {
     if (rolesPermitidos.includes(sesion.role)) {
       return true;
     }
-    return router.createUrlTree(['/user-dashboard']);
+    return router.createUrlTree(['/inicio']);
   };
 };

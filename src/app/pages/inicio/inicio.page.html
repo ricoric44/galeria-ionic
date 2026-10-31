@@ -1,0 +1,20 @@
+<app-cabecera titulo="Inicio" />
+<ion-content>
+  <main id="contenido-principal" tabindex="-1" class="caja ancha">
+    <h1>Hola, {{ sesion()?.nombre }}</h1>
+    <p>Tu rol es <strong>{{ sesion()?.role === 'admin' ? 'administrador' : 'usuario estándar' }}</strong>.
+      Usa el menú para consultar productos y movimientos.</p>
+
+    @if (resumen(); as r) {
+      <h2>Resumen del inventario</h2>
+      <div class="rejilla">
+        <app-stat-widget etiqueta="Productos" [valor]="r.totalProductos" detalle="Referencias en catálogo" (seleccionado)="abrir($event)" />
+        <app-stat-widget etiqueta="Unidades en stock" [valor]="r.unidadesEnStock | number" (seleccionado)="abrir($event)" />
+        <app-stat-widget etiqueta="Valor del inventario" [valor]="r.valorInventario | currency: 'EUR' : 'symbol' : '1.0-0'" (seleccionado)="abrir($event)" />
+        <app-stat-widget etiqueta="Sin stock" [valor]="r.productosSinStock" detalle="Referencias agotadas" [alerta]="r.productosSinStock > 0" (seleccionado)="abrir($event)" />
+      </div>
+    } @else if (sesion()?.role === 'user') {
+      <p>El cuadro de mando con indicadores es exclusivo del administrador.</p>
+    }
+  </main>
+</ion-content>

@@ -1,0 +1,54 @@
+<section class="tabla" [attr.aria-label]="titulo()">
+  <div class="tabla-barra">
+    <label class="tabla-buscador">
+      <span class="tabla-etiqueta">Buscar en {{ titulo() }}</span>
+      <input type="search" [ngModel]="busqueda()" (ngModelChange)="buscar($event)" placeholder="Escribe para filtrar" autocomplete="off" />
+    </label>
+    <p class="tabla-recuento" role="status" aria-live="polite">{{ filtradas().length }} resultados</p>
+  </div>
+
+  <div class="tabla-scroll" tabindex="0" role="region" [attr.aria-label]="'Tabla ' + titulo() + ' con desplazamiento'">
+    <table>
+      <caption class="solo-lectores">{{ titulo() }}</caption>
+      <thead>
+        <tr>
+          @for (col of columnas(); track col.clave) {
+            <th scope="col" [attr.aria-sort]="ariaOrden(col.clave)" [class.num]="col.numerica">
+              <button type="button" (click)="ordenarPor(col.clave)">
+                {{ col.titulo }}
+                <span aria-hidden="true" class="flecha">{{ ariaOrden(col.clave) === 'ascending' ? '▲' : ariaOrden(col.clave) === 'descending' ? '▼' : '↕' }}</span>
+              </button>
+            </th>
+          }
+          @if (etiquetaAccion()) {
+            <th scope="col"><span class="solo-lectores">Acciones</span></th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (fila of visibles(); track $index) {
+          <tr (click)="filaSeleccionada.emit(fila)">
+            @for (col of columnas(); track col.clave) {
+              <td [class.num]="col.numerica" [attr.data-etiqueta]="col.titulo">{{ fila[col.clave] }}</td>
+            }
+            @if (etiquetaAccion()) {
+              <td>
+                <button type="button" class="accion" (click)="$event.stopPropagation(); accion.emit(fila)">
+                  {{ etiquetaAccion() }}<span class="solo-lectores"> {{ fila[columnas()[0].clave] }}</span>
+                </button>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr><td [attr.colspan]="columnas().length + (etiquetaAccion() ? 1 : 0)" class="vacio">No hay resultados para la búsqueda.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <nav class="tabla-paginas" aria-label="Paginación de la tabla">
+    <button type="button" (click)="cambiarPagina(-1)" [disabled]="paginaActual() === 0">Anterior</button>
+    <span>Página {{ paginaActual() + 1 }} de {{ totalPaginas() }}</span>
+    <button type="button" (click)="cambiarPagina(1)" [disabled]="paginaActual() >= totalPaginas() - 1">Siguiente</button>
+  </nav>
+</section>

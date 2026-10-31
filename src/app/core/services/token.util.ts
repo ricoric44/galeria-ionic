@@ -1,30 +1,34 @@
-export type Rol = 'admin' | 'supervisor' | 'user';
+export type Rol = 'admin' | 'user';
 
-// Claims del payload del JWT (RBAC: el token lleva roles y permisos, y la expiración).
+/** Claims del payload del JWT (RBAC: el token lleva roles, permisos y la expiración). */
 export interface Claims {
   sub: string;
   username: string;
+  nombre: string;
   roles: Rol[];
   permisos: string[];
   iat: number;
   exp: number;
 }
 
-// Permisos que concede cada rol (tabla RBAC: rol -> permisos).
+/** Tabla RBAC: rol -> permisos. */
 export const PERMISOS_POR_ROL: Record<Rol, string[]> = {
-  admin: ['galeria:ver', 'informes:ver', 'usuarios:gestionar'],
-  supervisor: ['galeria:ver', 'informes:ver'],
-  user: ['galeria:ver'],
+  admin: ['productos:ver', 'productos:editar', 'movimientos:ver', 'informes:ver', 'usuarios:gestionar'],
+  user: ['productos:ver', 'movimientos:ver'],
 };
 
 const codificar = (objeto: object): string =>
   btoa(JSON.stringify(objeto)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
 
-// JWT de demostración: cabecera.payload.firma. La firma es falsa porque no hay servidor real.
+/**
+ * Construye un JWT de demostración: cabecera.payload.firma.
+ * La firma es simbólica: no hay servidor real y un secreto en el cliente no sería secreto.
+ */
 export function firmar(claims: Claims): string {
   return `${codificar({ alg: 'HS256', typ: 'JWT' })}.${codificar(claims)}.firma-demo`;
 }
 
+/** Devuelve el payload del token o `null` si está mal formado. */
 export function decodificar(token: string | null): Claims | null {
   if (!token) return null;
   try {
@@ -35,6 +39,7 @@ export function decodificar(token: string | null): Claims | null {
   }
 }
 
+/** `true` si el token no existe, está corrupto o su `exp` ya pasó. */
 export function haCaducado(token: string | null): boolean {
   const claims = decodificar(token);
   return !claims || claims.exp * 1000 <= Date.now();
