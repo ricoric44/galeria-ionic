@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Memoria - Actividad individual 1 - DI 0488</title>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font: 11pt/1.5 "Segoe UI", Arial, sans-serif; color: #14233b; }
+h1 { font-size: 22pt; margin: 0 0 4px; color: #1c4e80; } h2 { font-size: 15pt; border-bottom: 2px solid #1c4e80; padding-bottom: 3px; margin-top: 26px; page-break-after: avoid; }
+h3 { font-size: 12pt; margin: 16px 0 4px; } table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 10pt; }
+th, td { border: 1px solid #b8c0cc; padding: 5px 8px; text-align: left; vertical-align: top; } th { background: #eef2f8; }
+code { background: #eef2f8; padding: 1px 4px; border-radius: 3px; font-size: 9.5pt; } .portada { margin-bottom: 18px; }
+.salto { page-break-before: always; } a { color: #0b3a6b; } .ok { color: #1b5e20; font-weight: 600; }
+</style></head><body>
+<div class="portada"><h1>Memoria de la Actividad individual 1</h1>
+<p><strong>Módulo:</strong> Desarrollo de Interfaces (0488) · <strong>Ciclo:</strong> DAM<br>
+<strong>Proyecto:</strong> Diseño, desarrollo y despliegue de un sistema de gestión multiplataforma (PWA/híbrida)<br>
+<strong>Alumno:</strong> {{alumno}} · <strong>Fecha:</strong> {{fecha}}</p></div>
+
+<h2>1. Enlace de GitHub del proyecto</h2>
+<p><a href="{{github}}">{{github}}</a></p>
+<p>Flujo Git Flow: ramas <code>main</code>, <code>develop</code> y <code>feature/*</code> fusionadas con <code>--no-ff</code> (historial visible en el repositorio). Integración continua en <code>.github/workflows/ci.yml</code>.</p>
+
+<h2>2. Enlace de Vercel (producción)</h2>
+<p><a href="{{vercel}}">{{vercel}}</a></p>
+<h3>Credenciales de prueba (datos sintéticos)</h3>
+<table><tr><th>Rol</th><th>Correo</th><th>Contraseña</th></tr>
+<tr><td>Administrador</td><td>{{admin_email}}</td><td>{{admin_password}}</td></tr>
+<tr><td>Usuario estándar</td><td>{{usuario_email}}</td><td>{{usuario_password}}</td></tr></table>
+<h3>Informe de accesibilidad y rendimiento (Lighthouse, móvil/escritorio simulado, build de producción)</h3>
+<table><tr><th>Página (con sesión de administrador)</th><th>Accessibility</th><th>Best Practices</th><th>Performance</th><th>SEO</th></tr>
+{{filas_lighthouse}}</table>
+<p>Los informes completos (HTML) están en la carpeta <code>informes-calidad/</code> del repositorio. La única observación abierta de Best Practices es informativa (mapas de código fuente en producción, que no se publican a propósito).</p>
+<h3>Documentación técnica generada</h3>
+<p>Compodoc (<code>npm run docs</code>), carpeta <code>documentacion/</code> del repositorio; el CI la genera y la sube como artefacto en cada ejecución.</p>
+
+<h2 class="salto">3. Manual de usuario</h2>
+<h3>Acceso y roles</h3>
+<p>Se accede con correo y contraseña. Quien no tenga cuenta puede crearla en <em>Crear cuenta</em> (el sistema comprueba en directo si el correo ya existe). Roles: <strong>Administrador</strong> (todo: alta y baja de productos, usuarios, cuadro de mando e informes) y <strong>Usuario estándar</strong> (consulta de productos y movimientos). La sesión caduca a los 5 minutos y se renueva sola.</p>
+<h3>Productos</h3><p>Tabla con buscador, ordenación por cabecera y paginación. El administrador dispone de <em>Eliminar</em> por fila y del formulario <em>Alta de producto</em>.</p>
+<h3>Movimientos en tiempo real</h3><p>Lista de entradas y salidas de stock que se actualiza sola cada pocos segundos; los botones permiten registrar un movimiento propio.</p>
+<h3>Cuadro de mando e informes (administrador)</h3><p>Indicadores y dos gráficos (stock por categoría y movimientos por tipo) con filtros de categoría y tipo que recalculan todo al instante; pulsar una barra filtra por esa categoría. <em>Descargar PDF</em> y <em>Descargar CSV</em> exportan la tabla de productos filtrada.</p>
+<h3>Accesibilidad</h3><p>Navegación completa con teclado (<code>Tab</code>, <code>Intro</code>, <code>Espacio</code>), enlace <em>Saltar al contenido principal</em>, foco visible, etiquetas y roles WAI-ARIA, contraste reforzado, texto ampliable al 200 % y diseño adaptable (móvil, tableta y escritorio). La ayuda también está dentro de la aplicación (menú <em>Ayuda</em>).</p>
+
+<h2 class="salto">4. Anexo de seguridad</h2>
+<h3>4.1 Autenticación y gestión de sesión</h3>
+<ul><li>Token de acceso tipo JWT (5 min) con roles y permisos, y token de refresco. Ante un 401 se renueva una sola vez para todas las peticiones en vuelo (single-flight) y se repite la petición; si falla, se cierra la sesión y se vuelve a la ruta pedida tras el login.</li>
+<li>Los tokens viven en <code>sessionStorage</code> (se borran al cerrar la pestaña). El cierre de sesión revoca el token de refresco.</li>
+<li>Limitación honesta: el backend es simulado en el navegador, así que la firma del JWT es simbólica. Con un servidor real, la firma (HMAC o RS256) y la verificación irían en el servidor y el refresco en cookie <code>HttpOnly; Secure; SameSite</code>.</li></ul>
+<h3>4.2 Control de acceso (RBAC)</h3>
+<ul><li>Tabla rol → permisos en un único punto. Las rutas de administración usan <code>canMatch</code> con <code>authGuard</code> y <code>roleGuard('admin')</code>: el código de esas pantallas ni se descarga para un usuario sin permiso.</li>
+<li>Defensa en profundidad: la API simulada exige el permiso por ruta (401 sin sesión, 403 sin permiso) aunque se llame directamente sin pasar por la interfaz; la directiva <code>*appHasRole</code> solo oculta elementos, no es la barrera.</li>
+<li>El alta pública siempre crea usuarios estándar: el rol nunca lo decide el cliente.</li></ul>
+<h3>4.3 Contraseñas y datos</h3>
+<ul><li>Ninguna contraseña en texto plano en el repositorio: los usuarios sintéticos se guardan como hash SHA-256 con sal. Las credenciales de prueba solo figuran en esta memoria.</li>
+<li>El inicio de sesión calcula el hash aunque el usuario no exista para no revelar qué correos están registrados.</li>
+<li>Datos 100 % sintéticos (nombres e inventario ficticios, dominio <code>.test</code>): no hay datos personales reales de terceros.</li>
+<li>Limitación: SHA-256 con sal es suficiente para esta simulación; en producción se usaría un algoritmo lento (Argon2id o bcrypt) en el servidor.</li></ul>
+<h3>4.4 Validación y protección contra inyección</h3>
+<ul><li>Formularios reactivos con validación síncrona y asíncrona (correo único con antirrebote y cancelación de consultas obsoletas).</li>
+<li>Angular escapa por defecto la interpolación; no se usa <code>innerHTML</code> ni <code>bypassSecurityTrust*</code>. La redirección tras el login solo admite rutas internas (evita <em>open redirect</em>).</li>
+<li>Exportación CSV protegida frente a inyección de fórmulas (los valores que empiezan por <code>= + - @</code> se prefijan).</li></ul>
+<h3>4.5 Cabeceras y despliegue</h3>
+<ul><li><code>vercel.json</code>: Content-Security-Policy estricta (<code>default-src 'self'</code>, sin scripts en línea, <code>frame-ancestors 'none'</code>, <code>object-src 'none'</code>), HSTS, <code>X-Content-Type-Options</code>, <code>X-Frame-Options: DENY</code>, <code>Referrer-Policy</code> y <code>Permissions-Policy</code>. Para que la CSP no bloquee nada se desactivó la inyección de CSS crítico en línea.</li>
+<li>CI/CD: el despliegue a producción depende (<code>needs</code>) de que pasen lint, pruebas y build. Los secretos de Vercel viven en GitHub Secrets, nunca en el código.</li>
+<li>Dependencias fijadas con <code>package-lock.json</code> y <code>npm ci</code>; ningún token ni clave real de terceros en el repositorio.</li></ul>
+<h3>4.6 Accesibilidad como requisito de seguridad de uso</h3>
+<p>Mensajes de error asociados a cada campo (<code>aria-describedby</code>, <code>role="alert"</code>), estados de carga anunciados (<code>role="status"</code>) y gráficos con alternativa textual en tabla, de modo que la información crítica no depende de la vista.</p>
+<h3>4.7 Mejoras previstas</h3>
+<p>Backend real con verificación de firma, refresco en cookie HttpOnly, limitación de intentos de login, registro de auditoría y pruebas E2E del control de acceso.</p>
+</body></html>
