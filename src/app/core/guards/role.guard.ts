@@ -1,10 +1,11 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanMatchFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Rol } from '../services/token.util';
 
-// Factoría: devuelve un guard que exige un rol concreto.
+// Factoría: devuelve un guard que exige uno de los roles indicados.
 // Si el usuario tiene otro rol, lo redirige a su panel por defecto.
-export const roleGuard = (allowedRole: string): CanActivateFn => {
+export const roleGuard = (...rolesPermitidos: Rol[]): CanMatchFn => {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
@@ -13,7 +14,7 @@ export const roleGuard = (allowedRole: string): CanActivateFn => {
     if (!sesion) {
       return router.createUrlTree(['/login']);
     }
-    if (sesion.role === allowedRole) {
+    if (rolesPermitidos.includes(sesion.role)) {
       return true;
     }
     return router.createUrlTree(['/user-dashboard']);

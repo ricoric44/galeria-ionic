@@ -11,11 +11,31 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>Hola, {{ currentSession()?.username }}</ion-card-title>
-      <ion-card-subtitle>Rol: {{ currentSession()?.role }}</ion-card-subtitle>
+      <ion-card-subtitle>Rol: {{ currentSession()?.role }} · permisos: {{ currentSession()?.permisos?.join(', ') }}</ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
-      <p>Esta es tu página. No tienes acceso a <code>/admin</code>: el <code>roleGuard</code> te redirige aquí.</p>
+      <p>Los botones de abajo solo existen en el DOM para los roles que pueden usarlos (<code>*hasRole</code>).</p>
+
+      <ion-button *hasRole="['admin', 'supervisor']" (click)="ir('/informes')">Ir a informes</ion-button>
+      <ion-button *hasRole="'admin'" color="dark" (click)="ir('/admin')">Ir a administración</ion-button>
+      <ion-button color="medium" (click)="ir('/admin')">Intentar /admin (guard)</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Probar el interceptor</ion-card-title>
+      <ion-card-subtitle>Servidor simulado: 401 con token caducado, 403 sin permiso</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button size="small" (click)="consultar('/api/informes')">GET /api/informes</ion-button>
+      <ion-button size="small" (click)="consultar('/api/usuarios')">GET /api/usuarios</ion-button>
+      <ion-button size="small" color="warning" (click)="caducarToken()">Caducar token</ion-button>
+
+      @for (linea of registro(); track $index) {
+        <p><code>{{ linea }}</code></p>
+      }
     </ion-card-content>
   </ion-card>
 </ion-content>

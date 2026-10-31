@@ -15,12 +15,17 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [authGuard, roleGuard('admin')],
+    canMatch: [authGuard, roleGuard('admin')],
     loadComponent: () => import('./pages/admin/admin.page').then(m => m.AdminPage)
   },
   {
+    path: 'informes',
+    canMatch: [authGuard, roleGuard('admin', 'supervisor')],
+    loadComponent: () => import('./pages/informes/informes.page').then(m => m.InformesPage)
+  },
+  {
     path: 'user-dashboard',
-    canActivate: [authGuard],
+    canMatch: [authGuard],
     loadComponent: () => import('./pages/user-dashboard/user-dashboard.page').then(m => m.UserDashboardPage)
   },
   {

@@ -15,8 +15,8 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p>Has superado la validación del enrutador (<code>authGuard</code>) y de <code>roleGuard('admin')</code>.</p>
-      <p>La sesión está almacenada activamente en <code>sessionStorage</code>.</p>
+      <p>Has superado la validación del enrutador (<code>authGuard</code>) y de <code>roleGuard('admin')</code>, ambos con <code>canMatch</code>.</p>
+      <p>La sesión se reconstruye a partir del JWT guardado en <code>sessionStorage</code>.</p>
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -1,11 +1,12 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanMatchFn, Router, UrlSegment } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-// Solo deja pasar a usuarios con sesión iniciada. Si no la tienen, redirige a /login.
-export const authGuard: CanActivateFn = () => {
+// Solo deja pasar a usuarios con sesión. Si no, redirige a /login guardando la URL pedida (returnUrl).
+export const authGuard: CanMatchFn = (_route, segments: UrlSegment[]) => {
   const authService = inject(AuthService);
-  const router = inject(Router);
+  if (authService.isAuthenticated()) return true;
 
-  return authService.isAuthenticated() ? true : router.createUrlTree(['/login']);
+  const returnUrl = '/' + segments.map(s => s.path).join('/');
+  return inject(Router).createUrlTree(['/login'], { queryParams: { returnUrl } });
 };
